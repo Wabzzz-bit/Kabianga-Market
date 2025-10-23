@@ -5,107 +5,88 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Kabianga Market Login</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@600&family=Open+Sans&display=swap');
     body {
+      background-color: #121212;
+      color: #e0e0e0;
       font-family: 'Open Sans', sans-serif;
-      background: #121212;
-      color: #eee;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
       margin: 0;
     }
-    .login-container {
+    .container {
       background: #1f1f1f;
       padding: 2rem;
       border-radius: 10px;
       width: 320px;
-      box-shadow: 0 0 10px #3949ab;
-    }
-    h2 {
+      box-shadow: 0 0 15px #3949ab;
       text-align: center;
+    }
+    h1 {
       font-family: 'Montserrat', sans-serif;
       color: #82b1ff;
-      margin-bottom: 1rem;
+      margin-bottom: 1.5rem;
     }
-    label {
-      display: block;
-      margin-top: 1rem;
-      font-weight: 600;
-    }
-    input[type="email"],
-    input[type="password"] {
+    input {
       width: 100%;
-      padding: 0.5rem;
-      margin-top: 0.3rem;
-      border: none;
+      padding: 0.8rem;
+      margin: 0.5rem 0 1rem 0;
       border-radius: 5px;
+      border: none;
       font-size: 1rem;
     }
     button {
       width: 100%;
-      margin-top: 1.5rem;
-      padding: 0.7rem;
-      background: #2979ff;
+      padding: 0.8rem;
+      background-color: #2979ff;
       border: none;
       border-radius: 5px;
-      font-weight: 700;
+      font-weight: 600;
       color: white;
       cursor: pointer;
+      font-size: 1rem;
       transition: background-color 0.3s ease;
     }
     button:hover {
-      background: #5393ff;
-    }
-    .link {
-      color: #82b1ff;
-      cursor: pointer;
-      margin-top: 1rem;
-      display: block;
-      text-align: center;
-      font-size: 0.9rem;
-    }
-    .error, .message {
-      margin-top: 1rem;
-      font-size: 0.9rem;
-      text-align: center;
-    }
-    .error {
-      color: #ff6b6b;
+      background-color: #5393ff;
     }
     .message {
-      color: #90caf9;
+      margin: 1rem 0 0 0;
+      font-weight: 600;
+      color: #ff6b6b;
+      min-height: 1.2rem;
+    }
+    .info-link {
+      margin-top: 1rem;
+      display: block;
+      color: #82b1ff;
+      text-decoration: none;
     }
   </style>
 </head>
 <body>
-  <div class="login-container">
-    <h2>Kabianga Market Login</h2>
-    <form id="login-form">
-      <label for="email">Email:</label>
-      <input type="email" id="email" required autocomplete="username" />
-      
-      <label for="password">Password:</label>
-      <input type="password" id="password" required autocomplete="current-password" />
-      
-      <button type="submit">Login</button>
-    </form>
 
-    <button id="signup-btn">Create Account</button>
-    <button id="reset-btn">Forgot Password?</button>
-
-    <div class="error" id="error-msg"></div>
-    <div class="message" id="message-msg"></div>
+  <div class="container">
+    <h1>Kabianga Market Login</h1>
+    <input type="email" id="email" placeholder="Email address" required />
+    <input type="password" id="password" placeholder="Password" required />
+    <button id="login-btn">Login</button>
+    <button id="signup-btn" style="margin-top: 0.5rem; background-color:#555;">Sign Up</button>
+    <div class="message" id="message"></div>
+    <a href="index.html" class="info-link">Back to Market</a>
   </div>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
-    import { 
-      getAuth, 
-      signInWithEmailAndPassword, 
-      createUserWithEmailAndPassword, 
-      sendEmailVerification, 
-      sendPasswordResetEmail 
+    import {
+      getAuth,
+      signInWithEmailAndPassword,
+      createUserWithEmailAndPassword,
+      sendEmailVerification,
+      onAuthStateChanged,
+      signOut
     } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
 
     const firebaseConfig = {
@@ -121,78 +102,66 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    const loginForm = document.getElementById('login-form');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const loginBtn = document.getElementById('login-btn');
     const signupBtn = document.getElementById('signup-btn');
-    const resetBtn = document.getElementById('reset-btn');
-    const errorMsg = document.getElementById('error-msg');
-    const messageMsg = document.getElementById('message-msg');
+    const messageEl = document.getElementById('message');
 
-    loginForm.addEventListener('submit', e => {
-      e.preventDefault();
-      errorMsg.textContent = '';
-      messageMsg.textContent = '';
+    loginBtn.addEventListener('click', () => {
+      const email = emailInput.value.trim();
+      const password = passwordInput.value.trim();
+      messageEl.textContent = '';
 
-      const email = loginForm.email.value.trim();
-      const password = loginForm.password.value;
+      if (!email || !password) {
+        messageEl.textContent = 'Please enter email and password.';
+        return;
+      }
 
       signInWithEmailAndPassword(auth, email, password)
         .then(userCredential => {
           if (userCredential.user.emailVerified) {
-            window.location.href = "index.html";
+            messageEl.style.color = '#90caf9';
+            messageEl.textContent = 'Login successful! Redirecting...';
+            setTimeout(() => {
+              window.location.href = 'index.html';
+            }, 1500);
           } else {
-            errorMsg.textContent = "Please verify your email before logging in.";
+            messageEl.style.color = '#ff6b6b';
+            messageEl.textContent = 'Please verify your email first. Check your inbox.';
             auth.signOut();
           }
         })
-        .catch(err => {
-          errorMsg.textContent = err.message;
+        .catch(error => {
+          messageEl.style.color = '#ff6b6b';
+          messageEl.textContent = error.message;
         });
     });
 
     signupBtn.addEventListener('click', () => {
-      errorMsg.textContent = '';
-      messageMsg.textContent = '';
-
-      const email = loginForm.email.value.trim();
-      const password = loginForm.password.value;
+      const email = emailInput.value.trim();
+      const password = passwordInput.value.trim();
+      messageEl.textContent = '';
 
       if (!email || !password) {
-        errorMsg.textContent = "Please enter email and password to sign up.";
+        messageEl.textContent = 'Please enter email and password.';
         return;
       }
 
       createUserWithEmailAndPassword(auth, email, password)
         .then(userCredential => {
-          sendEmailVerification(userCredential.user)
-            .then(() => {
-              messageMsg.textContent = "Verification email sent! Check your inbox.";
-              auth.signOut();
-            });
+          sendEmailVerification(userCredential.user).then(() => {
+            messageEl.style.color = '#90caf9';
+            messageEl.textContent = 'Sign up successful! Verification email sent. Check your inbox.';
+            auth.signOut();
+          });
         })
-        .catch(err => {
-          errorMsg.textContent = err.message;
-        });
-    });
-
-    resetBtn.addEventListener('click', () => {
-      errorMsg.textContent = '';
-      messageMsg.textContent = '';
-
-      const email = loginForm.email.value.trim();
-      if (!email) {
-        errorMsg.textContent = "Please enter your email to reset password.";
-        return;
-      }
-
-      sendPasswordResetEmail(auth, email)
-        .then(() => {
-          messageMsg.textContent = "Password reset email sent! Check your inbox.";
-        })
-        .catch(err => {
-          errorMsg.textContent = err.message;
+        .catch(error => {
+          messageEl.style.color = '#ff6b6b';
+          messageEl.textContent = error.message;
         });
     });
   </script>
+
 </body>
 </html>
-
