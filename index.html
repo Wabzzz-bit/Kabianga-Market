@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kabianga University Market</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&family=Open+Sans&display=swap" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body>
+  <header>
+    <nav class="navbar">
+      <div class="logo">Kabianga Market</div>
+      <ul class="nav-links">
+        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="shop.html">Shop</a></li>
+        <li><a href="categories.html">Categories</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="faq.html">FAQ</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="cart.html"><i class="fas fa-shopping-cart"></i></a></li>
+      </ul>
+      <button id="darkModeToggle"><i class="fas fa-moon"></i></button>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Welcome to Kabianga University Market</h1>
+      <p>Your one-stop shop for student essentials and more.</p>
+      <a href="shop.html" class="btn">Shop Now</a>
+    </div>
+  </section>
+
+  <section class="featured">
+    <h2>Featured Products</h2>
+    <div class="product-grid">
+      <div class="product-card">
+        <img src="assets/images/shoes.jpg" alt="Shoes">
+        <h3>Sport Shoes</h3>
+        <p>Comfortable and stylish running shoes.</p>
+        <span class="price">$25</span>
+      </div>
+      <div class="product-card">
+        <img src="assets/images/hoodie.jpg" alt="Hoodie">
+        <h3>Kabianga Hoodie</h3>
+        <p>Stay warm, represent your school!</p>
+        <span class="price">$18</span>
+      </div>
+      <div class="product-card">
+        <img src="assets/images/perfume.jpg" alt="Perfume">
+        <h3>Classic Perfume</h3>
+        <p>Fresh scent for your daily routine.</p>
+        <span class="price">$12</span>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 Kabianga University Market | All Rights Reserved.</p>
+  </footer>
+<!-- Firebase SDKs -->
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-analytics.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  const firebaseConfig = {
+    apiKey: "AIzaSyBPblcnvWk6YofhTV9t1bUWcdXyW3OZRps",
+    authDomain: "kabianga-market-auth.firebaseapp.com",
+    projectId: "kabianga-market-auth",
+    storageBucket: "kabianga-market-auth.firebasestorage.app",
+    messagingSenderId: "140476348995",
+    appId: "1:140476348995:web:528fef98af4f69682172f6",
+    measurementId: "G-89MQKN41TT"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+</script>
+  <script src="js/script.js"></script>
+</body>
+</html>
